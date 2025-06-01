@@ -1,0 +1,14 @@
+---
+# defaults file for role_posteio
+
+posteio_image_tag: 2.4.10
+posteio_image_name: "localhost/poste.io:{{ posteio_image_tag }}"
+
+posteio_dir: /opt/posteio
+posteio_data_path: "{{ posteio_dir }}/data"
+
+posteio_hostname: "mail.nnc.guru"
+
+posteio_timezone: "Europe/Helsinki"
+posteio_listen_on: 65.109.108.143
+posteio_send_on: 65.109.108.143

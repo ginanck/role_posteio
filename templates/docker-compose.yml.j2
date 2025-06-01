@@ -1,0 +1,17 @@
+services:
+  poste:
+    # image: dirtsimple/poste.io:2.2.32
+    image: {{ posteio_image_name }}
+    restart: always
+    network_mode: host
+
+    hostname: {{ posteio_hostname }}
+
+    volumes:
+      - {{ posteio_data_path }}:/data
+      - /etc/localtime:/etc/localtime:ro
+
+    environment:
+      - "LISTEN_ON={{ posteio_listen_on }}"
+      - "SEND_ON={{ posteio_send_on }}"
+      - "TZ={{ posteio_timezone }}"

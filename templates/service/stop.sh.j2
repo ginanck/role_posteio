@@ -1,0 +1,32 @@
+#!/bin/bash
+# Poste.io Service Stop Script
+
+set -e
+
+POSTEIO_DIR="{{ posteio_dir }}"
+
+cd "$POSTEIO_DIR"
+
+if [ ! -f "docker-compose.yml" ]; then
+    echo "Error: docker-compose.yml not found in $POSTEIO_DIR" >&2
+    exit 1
+fi
+
+# Check if Poste.io is already stopped
+if ! docker compose -f docker-compose.yml ps --services --filter "status=running" | grep -q .; then
+    echo "Poste.io is already stopped"
+    exit 0
+fi
+
+# Stop Poste.io containers
+echo "Stopping Poste.io containers..."
+docker compose -f docker-compose.yml down
+
+# Verify containers are stopped
+sleep 5
+if ! docker compose -f docker-compose.yml ps --services --filter "status=running" | grep -q .; then
+    echo "Poste.io service stopped successfully"
+else
+    echo "Warning: Some Poste.io containers may still be running"
+    exit 1
+fi

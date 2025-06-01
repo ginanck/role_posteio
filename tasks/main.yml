@@ -1,0 +1,60 @@
+---
+# tasks file for role_posteio
+
+- name: Create poste.io installation directory
+  ansible.builtin.file:
+    path: "{{ posteio_dir }}"
+    state: directory
+    mode: '0755'
+    owner: root
+    group: root
+
+- name: Create Poste.io docker-compose file
+  ansible.builtin.template:
+    src: docker-compose.yml.j2
+    dest: "{{ posteio_dir }}/docker-compose.yml"
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Create Poste.io management scripts
+  ansible.builtin.template:
+    src: "service/{{ item }}.j2"
+    dest: "{{ posteio_dir }}/{{ item }}"
+    owner: root
+    group: root
+    mode: '0755'
+  loop:
+    - start.sh
+    - stop.sh
+    - restart.sh
+  register: posteio_scripts_changed
+
+- name: Create Poste.io systemd service file
+  ansible.builtin.template:
+    src: posteio.service.j2
+    dest: /etc/systemd/system/posteio.service
+    owner: root
+    group: root
+    mode: '0644'
+  register: posteio_service_changed
+  notify: 
+    - reload systemd
+    - restart posteio
+
+- name: Reload systemd daemon
+  ansible.builtin.systemd:
+    daemon_reload: yes
+  when: posteio_service_changed.changed
+
+- name: Check Poste.io service status
+  ansible.builtin.systemd:
+    name: posteio
+  register: posteio_service_status
+
+- name: Enable and start Poste.io service
+  ansible.builtin.systemd:
+    name: posteio
+    enabled: true
+    state: started
+  when: posteio_service_status.status.ActiveState != "active"

@@ -1,0 +1,44 @@
+#!/bin/bash
+# Poste.io Service Start Script
+
+set -e
+
+POSTEIO_DIR="{{ posteio_dir }}"
+
+cd "$POSTEIO_DIR"
+
+if [ ! -f "docker-compose.yml" ]; then
+    echo "Error: docker-compose.yml not found in $POSTEIO_DIR" >&2
+    exit 1
+fi
+
+# Check if Poste.io is already running
+if docker compose -f docker-compose.yml ps --services --filter "status=running" | grep -q .; then
+    echo "Poste.io is already running"
+    exit 0
+fi
+
+# Start Poste.io containers
+echo "Starting Poste.io containers..."
+docker compose -f docker-compose.yml up -d
+
+# Wait for services to be ready
+echo "Waiting for services to be ready..."
+sleep 15
+
+# Verify containers are running with retry logic
+MAX_RETRIES=6
+RETRY_COUNT=0
+while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+    if docker compose -f docker-compose.yml ps --services --filter "status=running" | grep -q .; then
+        echo "Poste.io service started successfully"
+        exit 0
+    fi
+    
+    RETRY_COUNT=$((RETRY_COUNT + 1))
+    echo "Waiting for containers to start... (attempt $RETRY_COUNT/$MAX_RETRIES)"
+    sleep 10
+done
+
+echo "Error: Poste.io containers failed to start properly after $MAX_RETRIES attempts" >&2
+exit 1
