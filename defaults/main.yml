@@ -2,7 +2,8 @@
 # defaults file for role_posteio
 
 posteio_image_tag: 2.4.10
-posteio_image_name: "localhost/poste.io:{{ posteio_image_tag }}"
+posteio_image_name: "localhost/posteio-mailserver:{{ posteio_image_tag }}"
+# posteio_image_name: "analogic/poste.io:{{ posteio_image_tag }}"
 
 posteio_dir: /opt/posteio
 posteio_data_path: "{{ posteio_dir }}/data"

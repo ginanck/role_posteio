@@ -1,2 +1,21 @@
 ---
 # handlers file for role_posteio
+
+- name: reload systemd
+  ansible.builtin.systemd:
+    daemon_reload: yes
+
+- name: restart posteio
+  ansible.builtin.systemd:
+    name: posteio
+    state: restarted
+
+- name: stop posteio
+  ansible.builtin.systemd:
+    name: posteio
+    state: stopped
+
+- name: start posteio
+  ansible.builtin.systemd:
+    name: posteio
+    state: started
