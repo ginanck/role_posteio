@@ -22,7 +22,8 @@ on:
         options:
           - all
           - default
-          - ubuntu2404
+          - almalinux-9
+          - almalinux-10
       python_version:
         description: 'Python version to use'
         required: false
