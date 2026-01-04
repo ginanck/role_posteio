@@ -4,4 +4,4 @@
   become: true
   roles:
     - role_base
-    - role_docker
+    # role_docker skipped - Docker already available via socket mount
