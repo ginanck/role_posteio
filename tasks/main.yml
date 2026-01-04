@@ -38,7 +38,7 @@
     group: root
     mode: '0644'
   register: posteio_service_changed
-  notify: 
+  notify:
     - reload systemd
     - restart posteio
 
