@@ -52,7 +52,7 @@
     name: posteio
   register: posteio_service_status
 
-- name: Enable and start Poste.io service
+- name: Enable Poste.io service
   ansible.builtin.systemd:
     name: posteio
     enabled: true
