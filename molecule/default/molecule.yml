@@ -7,7 +7,7 @@ dependency:
 driver:
   name: docker
 platforms:
-  - name: posteio-almalinux-8
+  - name: almalinux-8
     image: ghcr.io/ginanck/molecule-almalinux:8-latest
     pre_build_image: true
     privileged: true
@@ -27,9 +27,9 @@ provisioner:
     ANSIBLE_COLLECTIONS_PATH: ../../collections
   inventory:
     host_vars:
-      posteio-almalinux-8:
+      almalinux-8:
         ansible_user: root
-        base_hostname: "posteio-almalinux-8"
+        base_hostname: "almalinux-8"
         posteio_timezone: "Europe/Helsinki"
         posteio_hostname: "mail.nnc.guru"
         posteio_listen_on: 127.0.0.1
