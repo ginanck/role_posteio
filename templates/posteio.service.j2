@@ -1,10 +1,8 @@
 [Unit]
 Description=Poste.io Mail Server
 Documentation=https://poste.io/
-Requires=docker.service
-After=docker.service
-Wants=network-online.target
 After=network-online.target
+Wants=network-online.target
 
 [Service]
 Type=oneshot

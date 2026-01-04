@@ -38,7 +38,7 @@
     group: root
     mode: '0644'
   register: posteio_service_changed
-  notify: 
+  notify:
     - reload systemd
     - restart posteio
 
@@ -52,7 +52,7 @@
     name: posteio
   register: posteio_service_status
 
-- name: Enable and start Poste.io service
+- name: Enable Poste.io service
   ansible.builtin.systemd:
     name: posteio
     enabled: true
