@@ -85,20 +85,22 @@ ansible-galaxy install -r meta/install_requirements.yml
 
 ## Role Variables
 
+**These are static variables with lower priority**
 
 
-### File: `defaults/main.yml`
 
-| Variable | Default Value | Description |
-|----------|---------------|-------------|
-| `posteio_image_tag` | `2.4.10` | None |
-| `posteio_image_name` | `ghcr.io/ginanck/posteio-mailserver:{{ posteio_image_tag }}` | None |
-| `posteio_dir` | `/opt/posteio` | None |
-| `posteio_data_path` | `{{ posteio_dir }}/data` | None |
-| `posteio_hostname` | `mail.nnc.guru` | None |
-| `posteio_timezone` | `Europe/Helsinki` | None |
-| `posteio_listen_on` | `127.0.0.1` | None |
-| `posteio_send_on` | `127.0.0.1` | None |
+#### File: defaults/main.yml
+
+| Var | Type | Value |
+|-----|------|-------|
+| [posteio_data_path](defaults/main.yml#L8) | str | `{{ posteio_dir }}/data` |
+| [posteio_dir](defaults/main.yml#L7) | str | `/opt/posteio` |
+| [posteio_hostname](defaults/main.yml#L10) | str | `mail.nnc.guru` |
+| [posteio_image_name](defaults/main.yml#L5) | str | `ghcr.io/ginanck/posteio-mailserver:{{ posteio_image_tag }}` |
+| [posteio_image_tag](defaults/main.yml#L4) | str | `2.4.10` |
+| [posteio_listen_on](defaults/main.yml#L13) | str | `127.0.0.1` |
+| [posteio_send_on](defaults/main.yml#L14) | str | `127.0.0.1` |
+| [posteio_timezone](defaults/main.yml#L12) | str | `Europe/Helsinki` |
 
 
 
@@ -109,16 +111,19 @@ ansible-galaxy install -r meta/install_requirements.yml
 This role performs the following tasks:
 
 
-### `main.yml`
+### File: `tasks/main.yml`
+
+| Task Name | Module | Has Conditions | Line |
+|-----------|--------|----------------|------|
+| [Create poste.io installation directory](tasks/main.yml#L) | ansible.builtin.file | No | N/A |
+| [Create Poste.io docker-compose file](tasks/main.yml#L) | ansible.builtin.template | No | N/A |
+| [Create Poste.io management scripts](tasks/main.yml#L) | ansible.builtin.template | No | N/A |
+| [Create Poste.io systemd service file](tasks/main.yml#L) | ansible.builtin.template | No | N/A |
+| [Reload systemd daemon](tasks/main.yml#L) | ansible.builtin.systemd | Yes | N/A |
+| [Check Poste.io service status](tasks/main.yml#L) | ansible.builtin.systemd | No | N/A |
+| [Enable Poste.io service](tasks/main.yml#L) | ansible.builtin.systemd | Yes | N/A |
 
 
-- **Create poste.io installation directory**
-- **Create Poste.io docker-compose file**
-- **Create Poste.io management scripts**
-- **Create Poste.io systemd service file**
-- **Reload systemd daemon**
-- **Check Poste.io service status**
-- **Enable Poste.io service**
 
 
 
@@ -138,41 +143,6 @@ This role performs the following tasks:
         posteio_dir: /opt/posteio
 
 ```
-
-## Documentation Maintenance
-
-### Updating Dependencies
-
-1. **Update** `meta/main.yml`:
-   ```yaml
-   documented_requirements:
-     - src: https://github.com/user/role.git
-       version: master
-     - name: collection.name
-       version: 1.0.0
-   ```
-
-2. **Sync** `meta/install_requirements.yml` with the same requirements
-
-3. **Regenerate** documentation:
-   ```bash
-   pre-commit run --all-files
-   ```
-
-### Template Updates
-
-- Edit `.docsible_template.md` for structure changes
-- Test with: `docsible --role . --md-template .docsible_template.md -nob -com -tl`
-- Commit both template and generated README.md
-
-### Quick Checklist
-
-When updating dependencies:
-- [ ] Add to `meta/main.yml` → `documented_requirements`
-- [ ] Add to `meta/install_requirements.yml`
-- [ ] Run `pre-commit run --all-files`
-- [ ] Verify generated README.md
-- [ ] Commit all changes
 
 ## License
 
